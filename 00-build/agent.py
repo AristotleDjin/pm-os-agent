@@ -156,12 +156,12 @@ def run(which: str = "happy") -> None:
         if verdict["verdict"] == "pass":
             banner(f"HITL CHECKPOINT, status update + any proposed stories queued for "
                    f"your review. Nothing posted, no commitments made. "
-                   f"Run cost ≈ ${bounds.cost:.4f}")
+                   f"Run cost ~ ${bounds.cost:.4f}")
             return
 
         if revisions >= MAX_REVISIONS:
             banner(f"REVISION CAP hit ({MAX_REVISIONS}). Escalating to a human "
-                   f"instead of looping. Run cost ≈ ${bounds.cost:.4f}")
+                   f"instead of looping. Run cost ~ ${bounds.cost:.4f}")
             return
 
         revisions += 1
@@ -172,7 +172,7 @@ def run(which: str = "happy") -> None:
                          f"{verdict['reasons']}. Fix it or escalate."})
 
     banner(f"MAX ITERATIONS ({MAX_ITERATIONS}) reached without finishing. "
-           f"Escalating. Run cost ≈ ${bounds.cost:.4f}")
+           f"Escalating. Run cost ~ ${bounds.cost:.4f}")
 
 
 if __name__ == "__main__":
