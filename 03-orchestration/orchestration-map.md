@@ -51,6 +51,8 @@ This is a plain in-process function call (`critic.review(client, model, proposed
   6. If a tool rejected an action (e.g. `propose_stories` returning `batch_exceeds_queue_cap`) or a bound was hit, escalating counts as correct, the critic does not fail an escalation over wording once checks 4 and 6 hold.
 - **Fail action:** revise. `agent.py` tracks a `revisions` counter capped at `MAX_REVISIONS` (`CORTEX_MAX_REVISIONS`, default `2`). On a fail, Cortex gets the critic's `reasons` back and redrafts; once `revisions >= MAX_REVISIONS`, the run stops and escalates to the PM instead of looping again, "REVISION CAP hit (2). Escalating to a human instead of looping."
 
+**Observed limitation:** on a live re-run of the `task-vega-ga-date` fixture (M3 weakened-drafter test), the critic's first pass missed an invented "4.5% error rate" metric that appeared nowhere in the pulled data, a false pass, not a rejection. A second run against the same fixture correctly caught a similar invented metric and two rounds of GA-date-implying phrasing, exhausting the revision cap and escalating. This is a real, observed limitation: the critic's checks are prompted, not deterministic, so it isn't a guaranteed catch every time. Anyone deciding how much to trust this validator should weigh that in.
+
 ## 6. State: shared vs isolated
 
 **Shared:** the source project data (`get_project` / `get_activity` / `get_roadmap` / `get_norms` / `search_past_updates` results, accumulated in `source_log`) and the draft itself (`proposed`), both handed to the critic in full on every check.
