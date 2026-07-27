@@ -4,16 +4,17 @@
 
 ## Friction
 
-_Where did the build fight you? (Loop stop conditions? Context budget? The validator? Bounds?)_
+Getting the loop's stop conditions right (success vs. stuck vs. escalate). Directly observed across this project - the critic repeatedly bounced drafts over subtle "does this count as an implied commitment / does this need escalation" calls (the GA-date phrasing issue in task-vega-ga-date, the status-color calls in task-happy), not just factual grounding errors.
 
 ## Learning
 
-_The two or three things you now understand about shipping agents that you didn't before the course._
+1. Honesty about gaps (what's built vs. what's just designed) matters more than looking polished. This project repeatedly found and documented real gaps between the design docs and the actual code - get_roadmap/get_norms returning whole files instead of narrowed retrieval, no CI pipeline actually wired up, confidential filtering happening at the critic level rather than infrastructure level - and naming these gaps explicitly made every artifact more defensible, not less.
+2. Retrieval scoping (what to pull vs. include whole) has real, non-obvious tradeoffs. The "Past updates" source was the hardest call in memory-and-context.md - retrieve is the efficient default, but audit-style questions sometimes need full history a narrow retrieval could miss.
 
 ## Aha moment
 
-_The single insight that changed how you'd design your next agent._
+The critic catching mistakes doesn't mean it catches everything - verification has limits too. Directly observed: across repeated live runs of task-vega-ga-date, the critic caught 2 of 3 invented error-rate metrics (12% and 3%) but missed the first one (4.5%), which passed straight through to a "queued for review" state unflagged.
 
 ## What you'd do differently
 
-_If you rebuilt Cortex from scratch, what changes?_
+Build the retrieval-quality moves (grading, routing) into tools.py from the start, not after the fact. The current build's get_norms and get_roadmap tools return their entire file regardless of query - a gap that was documented in Module 4's memory-and-context.md but never actually closed in code, because retrieval quality was treated as a documentation exercise rather than a build requirement from day one.
